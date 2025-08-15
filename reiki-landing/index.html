@@ -1,0 +1,210 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Рейкі для жінок | Внутрішній баланс та гармонія</title>
+  <meta
+    name="description"
+    content="Відчуйте внутрішній спокій та гармонію з Рейкі. Перший сеанс у Харкові за 280 грн. Запис у Telegram або Instagram."
+  />
+  <meta name="keywords" content="Рейкі, енергетичне зцілення, Харків, жіноче здоров'я, релаксація" />
+  <meta name="robots" content="index, follow" />
+  <!-- Google Analytics (замените G-XXXXXXX на ваш Tracking ID) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+  <!-- Встроенные стили (замена Tailwind) -->
+  <style>
+    body { font-family: sans-serif; margin: 0; }
+    main {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem; max-width: 672px; margin: 0 auto; text-align: center;
+      background-image: url('/images/reiki-bg.webp'); background-size: cover;
+      background-position: center; background-repeat: no-repeat; min-height: 100vh;
+      color: white;
+    }
+    h1 { font-size: 2rem; font-weight: 600; color: #6ee7b7; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    @media (min-width: 768px) { h1 { font-size: 2.5rem; } }
+    p { font-size: 1.125rem; color: #a7f3d0; margin-bottom: 1.5rem; }
+    .card { background-color: rgba(255,255,255,0.9); color: #1f2937; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 1rem; margin-bottom: 1.5rem; }
+    .card-content { padding: 1.5rem; }
+    .card ul { list-style: disc; padding-left: 1.25rem; margin: 1rem 0; }
+    .card ul li { margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; }
+    img { border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 100%; height: auto; }
+    .button-container { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .button { display: inline-flex; align-items: center; padding: 0.5rem 1rem; border: 1px solid white; border-radius: 0.375rem; color: white; background: transparent; text-decoration: none; }
+    .button:hover { background: rgba(255,255,255,0.1); }
+    .button:focus-visible { outline: 2px solid #10b981; outline-offset: 2px; }
+    blockquote { font-style: italic; border-left: 4px solid #86efac; padding-left: 1rem; color: #d1fae5; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    .icon { width: 1rem; height: 1rem; margin-right: 0.5rem; }
+    @media (max-width: 640px) { main { padding: 1rem; } }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <!-- Зависимости через CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.12.16/dist/framer-motion.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.263.0/dist/umd/lucide-react.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-helmet-async@1.3.0/dist/index.js"></script>
+  <!-- Код компонента -->
+  <script>
+    const { createElement, useState } = React;
+    const { HelmetProvider, Helmet } = ReactHelmetAsync;
+    const { motion } = window.FramerMotion;
+    const { Instagram, Send } = window.LucideReact;
+
+    // Функция аналитики
+    const trackEvent = (action, category, label) => {
+      if (window.gtag) {
+        window.gtag("event", action, { event_category: category, event_label: label });
+      }
+    };
+
+    // Конфигурация анимации
+    const headingAnimation = {
+      initial: { opacity: 0, y: -20 },
+      whileInView: { opacity: 1, y: 0 },
+      transition: { duration: 0.6 },
+      viewport: { once: true },
+    };
+
+    // Компонент ReikiNewClientLanding
+    function ReikiNewClientLanding() {
+      const [imageError, setImageError] = useState(false);
+
+      return createElement(HelmetProvider, null,
+        createElement('div', null,
+          createElement(Helmet, null,
+            createElement('title', null, 'Рейкі для жінок | Внутрішній баланс та гармонія'),
+            createElement('meta', { name: 'description', content: 'Відчуйте внутрішній спокій та гармонію з Рейкі. Перший сеанс у Харкові за 280 грн. Запис у Telegram або Instagram.' }),
+            createElement('meta', { name: 'keywords', content: 'Рейкі, енергетичне зцілення, Харків, жіноче здоров\'я, релаксація' }),
+            createElement('meta', { name: 'robots', content: 'index, follow' })
+          ),
+          createElement('main', { className: 'flex flex-col items-center justify-center', role: 'main', 'aria-label': 'Лендинг сторінка для нових клієнток Рейкі' },
+            createElement(motion.h1, { ...headingAnimation, className: 'h1' },
+              'Перший крок до гармонії: Рейкі для жінок, які шукають ', createElement('strong', null, 'внутрішній баланс')
+            ),
+            createElement('p', null, 'Відновлення, глибокий сон, баланс енергії — без таблеток і без поспіху.'),
+            createElement('div', { className: 'card', role: 'region', 'aria-label': 'Переваги Рейкі' },
+              createElement('div', { className: 'card-content' },
+                createElement('p', null, 'Ви відчуваєте втому, тривогу або розбалансованість? Рейкі-сеанс — це ніжний, безпечний і глибоко заспокійливий дотик до вашого енергетичного простору. Це практика, що допомагає:'),
+                createElement('ul', null,
+                  createElement('li', null, '🌸 Зняти напругу та втому'),
+                  createElement('li', null, '🌿 Відновити внутрішню рівновагу'),
+                  createElement('li', null, '😴 Налагодити сон без медикаментів'),
+                  createElement('li', null, '🤲 Повернути зв\'язок із собою і світом')
+                )
+              )
+            ),
+            createElement('div', { className: 'card', role: 'region', 'aria-label': 'Інформація про Рейкі' },
+              createElement('div', { className: 'card-content' },
+                createElement('h2', null, 'Що таке Рейкі?'),
+                createElement('div', null,
+                  createElement('p', null, 'Рейкі — це японська система енергетичного зцілення, створена грандмайстром ', createElement('strong', null, 'Мікао Усуї'), '. Вона базується на м’якому енергетичному впливі, який активує внутрішні сили тіла для самовідновлення.'),
+                  createElement('p', null, 'Майстер, який проводить сеанс, належить до класичної Usui-гілки Рейкі, лінія передачі якої підтверджена сертифікатами та ведеться від самого Мікао Усуї.'),
+                  createElement('img', {
+                    src: imageError ? '/images/fallback-image.webp' : '/images/mikao-usui.webp',
+                    alt: 'Мікао Усуї, засновник класичної системи Рейкі',
+                    className: 'img',
+                    loading: 'lazy',
+                    onError: () => setImageError(true)
+                  }),
+                  createElement('p', { className: 'text-sm text-gray-600 italic text-center' }, 'На зображенні: Мікао Усуї — засновник класичної системи Рейкі')
+                )
+              )
+            ),
+            createElement('div', { className: 'card', role: 'region', 'aria-label': 'Спеціальна пропозиція' },
+              createElement('div', { className: 'card-content' },
+                createElement('h2', null, 'Спеціальна пропозиція для нових клієнток'),
+                createElement('ul', null,
+                  createElement('li', null, '✨ Перший індивідуальний Рейкі-сеанс — ', createElement('strong', null, '280 грн')),
+                  createElement('li', null, '📍 У вас вдома (м. Харків)'),
+                  createElement('li', null, '💳 Оплата готівкою або на ', createElement('strong', null, 'PayPal')),
+                  createElement('li', null, '⏳ Тривалість: 45–60 хв')
+                ),
+                createElement('p', { className: 'text-green-700 font-medium' }, '🎁 У подарунок на вибір:'),
+                createElement('ul', null,
+                  createElement('li', null, 'Сумісне дихання з майстром'),
+                  createElement('li', null, 'Індивідуальна медитація ТАРО')
+                )
+              )
+            ),
+            createElement('div', { className: 'button-container' },
+              createElement('p', null, 'Пишіть у ', createElement('strong', null, 'Telegram'), ' або ', createElement('strong', null, 'Instagram Direct'), ' — я зв\'яжусь із вами для уточнення деталей і зручного часу. Місця на серпень обмежені 💌'),
+              createElement('div', { className: 'button-container' },
+                createElement('a', {
+                  href: 'https://t.me/soft_reiki_tarot',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'button',
+                  onClick: () => trackEvent('click', 'Social Links', 'Telegram'),
+                  'aria-label': 'Зв\'язатися через Telegram'
+                }, createElement(Send, { className: 'icon', 'aria-hidden': 'true' }), 'Telegram'),
+                createElement('a', {
+                  href: 'https://instagram.com/soft_reiki.tarot',
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'button',
+                  onClick: () => trackEvent('click', 'Social Links', 'Instagram'),
+                  'aria-label': 'Зв\'язатися через Instagram'
+                }, createElement(Instagram, { className: 'icon', 'aria-hidden': 'true' }), 'Instagram')
+              )
+            ),
+            createElement('blockquote', null, '🌿 Внутрішній спокій, відновлення, енергетичний баланс — почніть з малого кроку. Подаруйте собі мить тиші і турботи.')
+          )
+        )
+      );
+    }
+
+    // Рендеринг компонента
+    ReactDOM.render(createElement(ReikiNewClientLanding), document.getElementById('root'));
+  </script>
+</body>
+</html>
